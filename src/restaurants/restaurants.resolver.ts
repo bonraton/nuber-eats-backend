@@ -9,7 +9,7 @@ export class RestorauntResolver {
     return [];
   }
   @Mutation(() => Boolean)
-  createRestaurant(@Args() createRestaurantDto: createRestaurantDto) {
+  createRestaurant(@Args('input') createRestaurantDto: createRestaurantDto) {
     return true;
   }
 }
