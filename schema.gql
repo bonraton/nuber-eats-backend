@@ -2,12 +2,21 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type User {
-  id: Float!
-  email: String!
-  password: String!
+type CreateAccountOutput {
+  error: String
+  ok: Boolean!
 }
 
 type Query {
-  users: [User!]!
+  hi: Boolean!
+}
+
+type Mutation {
+  createAccount(input: CreateAccountInput!): CreateAccountOutput!
+}
+
+input CreateAccountInput {
+  email: String!
+  password: String!
+  role: String!
 }

@@ -1,16 +1,12 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { CoreEntity } from 'src/common/etities/core.entity';
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity } from 'typeorm';
 
 type UserRole = 'client' | 'owner' | 'delivery';
 
-@ObjectType()
+@ObjectType({ isAbstract: true })
 @Entity()
 export class User extends CoreEntity {
-  @PrimaryColumn()
-  @Field(() => Number)
-  id: number;
-
   @Column()
   @Field(() => String)
   email: string;
@@ -19,6 +15,7 @@ export class User extends CoreEntity {
   @Column()
   password: string;
 
+  @Field(() => String)
   @Column()
   role: UserRole;
 }
