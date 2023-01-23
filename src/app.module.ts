@@ -6,6 +6,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './user/user.module';
 import { User } from './user/entities/user.entity';
+import { JwtModule } from './jwt/jwt.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { User } from './user/entities/user.entity';
         DB_USERNAME: Joi.string().required(),
         DB_PASSWORD: Joi.string().required(),
         DB_NAME: Joi.string().required(),
+        PRIVATE_KEY: Joi.string().required(),
       }),
     }),
     TypeOrmModule.forRoot({
@@ -39,6 +41,9 @@ import { User } from './user/entities/user.entity';
       // autoSchemaFile: true, // used for created schema
     }),
     UserModule,
+    JwtModule.forRoot({
+      privateKey: process.env.PRIVATE_KEY,
+    }),
   ],
   controllers: [],
   providers: [],
