@@ -1,4 +1,4 @@
-import { Args, Mutation, Query } from '@nestjs/graphql';
+import { Args, Context, Mutation, Query } from '@nestjs/graphql';
 import { Resolver } from '@nestjs/graphql';
 import { MutationOutput } from 'src/common/dtos/output.dto';
 import { CreateAccountInput } from './entities/dtos/create-account.dto';
@@ -9,10 +9,7 @@ import { UsersService } from './user.service';
 @Resolver(() => User)
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
-  @Query(() => Boolean)
-  hi() {
-    return true;
-  }
+  @Query(() => User)
   @Mutation(() => MutationOutput)
   async createAccount(
     @Args('input') createAccountInput: CreateAccountInput,
@@ -25,6 +22,11 @@ export class UsersResolver {
         error: e,
       };
     }
+  }
+
+  @Query(() => User)
+  getMe(@Context() context) {
+    console.log(context.user);
   }
 
   @Mutation(() => LoginOutput)

@@ -14,15 +14,11 @@ type LoginOutput {
 }
 
 type Query {
-  hi: Boolean!
+  createAccount(input: CreateAccountInput!): User!
+  getMe: User!
 }
 
-type Mutation {
-  createAccount(input: CreateAccountInput!): MutationOutput!
-  login(input: LoginInput!): LoginOutput!
-}
-
-input CreateAccountInput {
+type User {
   email: String!
   password: String!
   role: UserRole!
@@ -32,6 +28,17 @@ enum UserRole {
   Client
   Owner
   Delivery
+}
+
+input CreateAccountInput {
+  email: String!
+  password: String!
+  role: UserRole!
+}
+
+type Mutation {
+  createAccount(input: CreateAccountInput!): MutationOutput!
+  login(input: LoginInput!): LoginOutput!
 }
 
 input LoginInput {
