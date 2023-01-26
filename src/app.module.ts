@@ -43,9 +43,9 @@ import { JwtMiddleWare } from './jwt/jwt.middleware';
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      autoSchemaFile: 'schema.gql',
-      context: ({ req }) => ({ user: req['user'] }), // used for generating schema
+      autoSchemaFile: 'schema.gql', // used for generating schema
       // autoSchemaFile: true, // used for created schema
+      context: ({ req }) => ({ user: req['user'] }), // context gets with every request to gql
     }),
     UserModule,
     JwtModule.forRoot({
