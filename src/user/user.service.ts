@@ -7,11 +7,14 @@ import { LoginInput, LoginOutput } from './entities/dtos/login.dto';
 import { CoreOutput } from 'src/common/dtos/output.dto';
 import { JwtService } from 'src/jwt/jwt.service';
 import { EditProfileInput } from './entities/dtos/edit-profile.dto';
+import { Verification } from './entities/verification.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private readonly users: Repository<User>,
+    @InjectRepository(Verification)
+    private readonly verifications: Repository<Verification>,
     private readonly jwtService: JwtService,
   ) {}
 
@@ -28,7 +31,16 @@ export class UsersService {
           error: 'There is a user with a email already',
         };
       }
-      await this.users.save(this.users.create({ email, password, role }));
+      const user = await this.users.save(
+        this.users.create({ email, password, role }),
+      );
+      const verifictaion = this.verifications.create({ user });
+      await this.verifications.save(verifictaion);
+      // await this.verifications.save(
+      //   this.verifications.create({
+      //     user,
+      //   }),
+      // );
       return { ok: true };
     } catch (e) {
       console.log(e);
