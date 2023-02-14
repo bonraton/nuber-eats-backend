@@ -1,4 +1,4 @@
-import { NotFoundException, UseGuards } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query } from '@nestjs/graphql';
 import { Resolver } from '@nestjs/graphql';
 import { AuthUser } from 'src/auth/auth-user.decorator';
@@ -14,6 +14,10 @@ import {
   UserProfileInput,
   UserProfileOutput,
 } from './entities/dtos/user-profile.dto';
+import {
+  VerifyEmailInput,
+  VerifyEmailOutput,
+} from './entities/dtos/verify-email.dto';
 import { User } from './entities/user.entity';
 import { UsersService } from './user.service';
 
@@ -24,14 +28,7 @@ export class UsersResolver {
   async createAccount(
     @Args('input') createAccountInput: CreateAccountInput,
   ): Promise<CoreOutput> {
-    try {
-      return this.usersService.createAccount(createAccountInput);
-    } catch (e) {
-      return {
-        ok: false,
-        error: e,
-      };
-    }
+    return this.usersService.createAccount(createAccountInput);
   }
 
   @Query(() => User)
@@ -42,14 +39,7 @@ export class UsersResolver {
 
   @Mutation(() => LoginOutput)
   async login(@Args('input') loginInput: LoginInput): Promise<LoginOutput> {
-    try {
-      return this.usersService.login(loginInput);
-    } catch (error) {
-      return {
-        ok: false,
-        error: error,
-      };
-    }
+    return this.usersService.login(loginInput);
   }
 
   @UseGuards(AuthGard)
@@ -91,5 +81,10 @@ export class UsersResolver {
         error,
       };
     }
+  }
+
+  @Mutation(() => VerifyEmailOutput)
+  verifyEmail(@Args('input') verifyInput: VerifyEmailInput) {
+    this.usersService.verifyEmail(verifyInput.code);
   }
 }
