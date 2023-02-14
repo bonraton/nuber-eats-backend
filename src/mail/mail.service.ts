@@ -24,7 +24,7 @@ export class MailService {
     form.append('to', `bonraton@gmail.com`);
     form.append('template', template);
     form.append('subject', subject);
-    emailVars.forEach((eVar) => form.append(eVar.key, eVar.value));
+    emailVars.forEach((eVar) => form.append(`v:${eVar.key}`, eVar.value));
     try {
       await got(`https://api.mailgun.net/v3/${this.options.domain}/messages`, {
         method: 'POST',
