@@ -9,6 +9,10 @@ import { JwtService } from 'src/jwt/jwt.service';
 import { EditProfileInput } from './entities/dtos/edit-profile.dto';
 import { Verification } from './entities/verification.entity';
 import { MailService } from 'src/mail/mail.service';
+import {
+  UserProfileInput,
+  UserProfileOutput,
+} from './entities/dtos/user-profile.dto';
 
 @Injectable()
 export class UsersService {
@@ -69,8 +73,16 @@ export class UsersService {
     }
   }
 
-  async findById(id: number): Promise<User> {
-    return this.users.findOne({ where: { id } });
+  async findById(id: number): Promise<UserProfileOutput> {
+    try {
+      const user = await this.users.findOneOrFail({ where: { id } });
+      return {
+        ok: true,
+        user,
+      };
+    } catch (error) {
+      return { ok: false, error: 'User is Not Found' };
+    }
   }
 
   async editProfile(userId: number, { email, password }: EditProfileInput) {
