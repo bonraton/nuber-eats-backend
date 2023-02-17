@@ -16,6 +16,7 @@ import {
   UserProfileInput,
   UserProfileOutput,
 } from './entities/dtos/user-profile.dto';
+import { VerifyEmailOutput } from './entities/dtos/verify-email.dto';
 
 @Injectable()
 export class UsersService {
@@ -114,16 +115,22 @@ export class UsersService {
     }
   }
 
-  async verifyEmail(code: string): Promise<boolean> {
-    const verification = await this.verifications.findOne({
-      where: { code },
-      loadRelationIds: true,
-    });
-    if (verification) {
-      verification.user.verified = true;
-      await this.users.save(verification.user);
-      await this.verifications.delete(verification.id);
+  async verifyEmail(code: string): Promise<VerifyEmailOutput> {
+    try {
+      const verification = await this.verifications.findOne({
+        where: { code },
+        loadRelationIds: true,
+      });
+      if (verification) {
+        verification.user.verified = true;
+        await this.users.save(verification.user);
+        await this.verifications.delete(verification.id);
+        return { ok: true };
+      } else {
+        return { ok: false, error: 'Verification not found' };
+      }
+    } catch (error) {
+      return { ok: false, error: 'Could not verify email' };
     }
-    return false;
   }
 }
