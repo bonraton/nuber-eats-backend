@@ -6,7 +6,10 @@ import { User } from './entities/user.entity';
 import { LoginInput, LoginOutput } from './entities/dtos/login.dto';
 import { CoreOutput } from 'src/common/dtos/output.dto';
 import { JwtService } from 'src/jwt/jwt.service';
-import { EditProfileInput } from './entities/dtos/edit-profile.dto';
+import {
+  EditProfileInput,
+  EditProfileOutput,
+} from './entities/dtos/edit-profile.dto';
 import { Verification } from './entities/verification.entity';
 import { MailService } from 'src/mail/mail.service';
 import {
@@ -85,20 +88,30 @@ export class UsersService {
     }
   }
 
-  async editProfile(userId: number, { email, password }: EditProfileInput) {
-    const user = await this.users.findOne({ where: { id: userId } });
-    if (email) {
-      user.email = email;
-      user.verified = false;
-      const verification = await this.verifications.save(
-        this.verifications.create({ user }),
-      );
-      this.mailService.sendVerificationEmail(user.email, verification.code);
+  async editProfile(
+    userId: number,
+    { email, password }: EditProfileInput,
+  ): Promise<EditProfileOutput> {
+    try {
+      const user = await this.users.findOne({ where: { id: userId } });
+      if (email) {
+        user.email = email;
+        user.verified = false;
+        const verification = await this.verifications.save(
+          this.verifications.create({ user }),
+        );
+        this.mailService.sendVerificationEmail(user.email, verification.code);
+      }
+      if (password) {
+        user.password = password;
+      }
+      await this.users.save(user);
+      return {
+        ok: true,
+      };
+    } catch (error) {
+      return { ok: false, error: 'Could not update profile' };
     }
-    if (password) {
-      user.password = password;
-    }
-    return this.users.save(user);
   }
 
   async verifyEmail(code: string): Promise<boolean> {
