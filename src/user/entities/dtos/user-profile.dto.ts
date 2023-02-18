@@ -8,7 +8,7 @@ export class UserProfileInput {
   userId: number;
 }
 
-@InputType()
+@ObjectType()
 export class UserProfileOutput extends CoreOutput {
   @Field(() => User, { nullable: true })
   user?: User;

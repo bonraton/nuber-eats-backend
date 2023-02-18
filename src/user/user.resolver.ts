@@ -54,7 +54,7 @@ export class UsersResolver {
       }
       return {
         ok: true,
-        user,
+        // user, ???
       };
     } catch (e) {
       return {
