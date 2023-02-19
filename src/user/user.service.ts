@@ -96,6 +96,7 @@ export class UsersService {
     try {
       const user = await this.users.findOne({ where: { id: userId } });
       if (email) {
+        //check email for excisting;
         user.email = email;
         user.verified = false;
         const verification = await this.verifications.save(

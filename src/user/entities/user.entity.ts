@@ -15,7 +15,7 @@ registerEnumType(UserRole, { name: 'UserRole' });
 @ObjectType({ isAbstract: true })
 @Entity()
 export class User extends CoreEntity {
-  @Column()
+  @Column({ unique: true })
   @Field(() => String)
   email: string;
 

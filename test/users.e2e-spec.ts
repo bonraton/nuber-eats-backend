@@ -237,7 +237,6 @@ describe('UserModule (e2e)', () => {
         })
         .expect(200)
         .expect((res) => {
-          console.log(res.body);
           const {
             body: {
               data: {
@@ -269,6 +268,33 @@ describe('UserModule (e2e)', () => {
         expect(error.message).toBe('Forbidden resource');
       });
   });
+  describe('editProfile', () => {
+    it('should changeEmail', async () => {
+      return await request(app.getHttpServer())
+        .post(GRAPHQL_ENDPOINT)
+        .set({ 'X-JWT': token })
+        .send({
+          query: `
+          mutation{
+            editProfile(input: {
+              email: "bonraton@gmail2222.com"
+            })
+            {
+              ok
+              error
+            }
+          }
+        `,
+        })
+        .expect(200)
+        .expect((res) => {
+          const {
+            body: { data: { editProfile: { ok, error } } = res },
+          } = res;
+          expect(ok).toBe(true);
+          expect(error).toBe(null);
+        });
+    });
+  });
   it.todo('verifyEmail');
-  it.todo('editProfile');
 });
