@@ -82,7 +82,7 @@ export class UsersService {
       const user = await this.users.findOneOrFail({ where: { id } });
       return {
         ok: true,
-        user,
+        user: user,
       };
     } catch (error) {
       return { ok: false, error: 'User is Not Found' };

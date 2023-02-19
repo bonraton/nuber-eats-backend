@@ -51,11 +51,12 @@ export class UsersResolver {
       const user = await this.usersService.findById(userProfileInput.userId);
       if (!user) {
         throw Error();
+      } else {
+        return {
+          ok: true,
+          ...user,
+        };
       }
-      return {
-        ok: true,
-        // user, ???
-      };
     } catch (e) {
       return {
         ok: false,
