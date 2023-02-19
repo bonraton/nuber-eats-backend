@@ -222,7 +222,53 @@ describe('UserModule (e2e)', () => {
         });
     });
   });
-  it.todo('me');
+  describe('me', () => {
+    it('should find my profile', async () => {
+      return await request(app.getHttpServer())
+        .post(GRAPHQL_ENDPOINT)
+        .set({ 'X-JWT': token })
+        .send({
+          query: `
+          {
+            me {
+              email
+            }
+          }`,
+        })
+        .expect(200)
+        .expect((res) => {
+          console.log(res.body);
+          const {
+            body: {
+              data: {
+                me: { email },
+              },
+            },
+          } = res;
+          expect(email).toEqual(EMAIL);
+        });
+    });
+  });
+  it('should not allow logget out user', async () => {
+    return await request(app.getHttpServer())
+      .post(GRAPHQL_ENDPOINT)
+      .send({
+        query: `
+          {
+            me {
+              email
+            }
+          }`,
+      })
+      .expect(200)
+      .expect((res) => {
+        const {
+          body: { errors },
+        } = res;
+        const [error] = errors;
+        expect(error.message).toBe('Forbidden resource');
+      });
+  });
   it.todo('verifyEmail');
   it.todo('editProfile');
 });
