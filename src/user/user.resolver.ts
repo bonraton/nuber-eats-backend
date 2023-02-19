@@ -86,6 +86,6 @@ export class UsersResolver {
 
   @Mutation(() => VerifyEmailOutput)
   verifyEmail(@Args('input') verifyInput: VerifyEmailInput) {
-    this.usersService.verifyEmail(verifyInput.code);
+    return this.usersService.verifyEmail(verifyInput.code);
   }
 }

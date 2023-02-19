@@ -120,15 +120,15 @@ export class UsersService {
     try {
       const verification = await this.verifications.findOne({
         where: { code },
-        loadRelationIds: true,
+        relations: ['user'],
       });
       if (verification) {
         verification.user.verified = true;
         await this.users.save(verification.user);
         await this.verifications.delete(verification.id);
-        return { ok: true };
+        return await { ok: true };
       } else {
-        return { ok: false, error: 'Verification not found' };
+        return { ok: false, error: 'Verification is not found' };
       }
     } catch (error) {
       return { ok: false, error: 'Could not verify email' };
