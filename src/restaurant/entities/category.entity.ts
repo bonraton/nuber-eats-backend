@@ -18,11 +18,6 @@ export class Category extends CoreEntity {
   @IsString()
   coverImg: string;
 
-  // @Field(() => String)
-  // @Column()
-  // @IsString()
-  // adress: string;
-
   @Field(() => String)
   @Column({ unique: true })
   @IsString()

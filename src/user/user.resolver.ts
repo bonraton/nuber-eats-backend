@@ -2,7 +2,8 @@ import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query } from '@nestjs/graphql';
 import { Resolver } from '@nestjs/graphql';
 import { AuthUser } from 'src/auth/auth-user.decorator';
-import { AuthGard } from 'src/auth/auth.guard';
+import { AuthGuard } from 'src/auth/auth.guard';
+import { Role } from 'src/auth/role.decorator';
 import { CoreOutput } from 'src/common/dtos/output.dto';
 import { CreateAccountInput } from './entities/dtos/create-account.dto';
 import {
@@ -32,7 +33,8 @@ export class UsersResolver {
   }
 
   @Query(() => User)
-  @UseGuards(AuthGard)
+  @UseGuards(AuthGuard)
+  @Role('Any')
   me(@AuthUser() authUser: User) {
     return authUser;
   }
@@ -42,8 +44,9 @@ export class UsersResolver {
     return this.usersService.login(loginInput);
   }
 
-  @UseGuards(AuthGard)
+  @UseGuards(AuthGuard)
   @Query(() => UserProfileOutput)
+  @Role('Any')
   async userProfile(
     @Args() userProfileInput: UserProfileInput,
   ): Promise<UserProfileOutput> {
@@ -65,8 +68,9 @@ export class UsersResolver {
     }
   }
 
-  @UseGuards(AuthGard)
+  @UseGuards(AuthGuard)
   @Mutation(() => EditProfileOutput)
+  @Role('Any')
   async editProfile(
     @AuthUser() authUser: User,
     @Args('input') editProfileInput: EditProfileInput,
