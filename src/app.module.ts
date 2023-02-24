@@ -67,7 +67,7 @@ import { AuthModule } from './auth/auth.module';
     }),
     UserModule,
     RestaurantModule,
-    AuthModule,
+    // AuthModule,
   ],
   controllers: [],
   providers: [],

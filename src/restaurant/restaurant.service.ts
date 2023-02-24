@@ -32,17 +32,18 @@ export class RestaurantService {
       let category = await this.categories.findOne({
         where: { slug: categorySlug },
       });
-      await this.restaurants.save(newRestaurant);
       if (!category) {
         category = await this.categories.save(
           this.categories.create({ slug: categorySlug, name: categoryName }),
         );
       }
       newRestaurant.category = category;
+      await this.restaurants.save(newRestaurant);
       return {
         ok: true,
       };
-    } catch {
+    } catch (e) {
+      console.log(e);
       return {
         ok: false,
         error: 'Could not create restaurant',

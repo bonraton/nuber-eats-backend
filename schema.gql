@@ -7,7 +7,7 @@ type Category {
   createdAt: DateTime!
   updatedAt: DateTime!
   name: String!
-  coverImg: String!
+  coverImg: String
   slug: String!
   restaurants: [Restaurant!]!
 }
