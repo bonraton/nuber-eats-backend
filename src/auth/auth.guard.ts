@@ -13,6 +13,7 @@ export class AuthGuard implements CanActivate {
       'roles',
       context.getHandler(),
     );
+    console.log(roles);
     if (!roles) {
       return true;
     }
@@ -24,6 +25,7 @@ export class AuthGuard implements CanActivate {
     if (roles.includes('Any')) {
       return true;
     }
+    console.log(user);
     return roles.includes(user.role);
   }
 }
