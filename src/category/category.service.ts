@@ -62,6 +62,7 @@ export class CategoryService {
         ok: true,
         category,
         totalPages: Math.ceil(totalResults / 30),
+        totalResult: totalResults,
       };
     } catch (e) {
       console.log(e);
