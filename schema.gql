@@ -88,6 +88,12 @@ type DeleteRestaurantOutput {
   ok: Boolean!
 }
 
+type RestaurantOutput {
+  error: String
+  ok: Boolean!
+  restaurant: Restaurant
+}
+
 type AllCategoriesOutput {
   error: String
   ok: Boolean!
@@ -104,8 +110,13 @@ type CategoryOutput {
 type Query {
   me: User!
   userProfile(userId: Float!): UserProfileOutput!
+  findRestaurant(input: RestaurantInput!): RestaurantOutput!
   allCategories: AllCategoriesOutput!
   category(input: CategoryInput!): CategoryOutput!
+}
+
+input RestaurantInput {
+  restaurantId: Float!
 }
 
 input CategoryInput {

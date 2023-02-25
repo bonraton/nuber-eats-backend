@@ -16,6 +16,7 @@ import {
 } from './dtos/edit-restaurant-dto';
 import { Category } from '../category/entities/category.entity';
 import { Restaurant } from './entities/restaurant.entity';
+import { RestaurantInput, RestaurantOutput } from './dtos/restaurant.dto';
 
 @Injectable()
 export class RestaurantService {
@@ -130,6 +131,31 @@ export class RestaurantService {
       return {
         ok: false,
         error: 'Could not delete',
+      };
+    }
+  }
+
+  async findRestaurant(
+    restaurantInput: RestaurantInput,
+  ): Promise<RestaurantOutput> {
+    try {
+      const restaurant = await this.restaurants.findOne({
+        where: { id: restaurantInput.restaurantId },
+      });
+      if (!restaurant) {
+        return {
+          ok: false,
+          error: 'Restaurant is not found',
+        };
+      }
+      return {
+        ok: true,
+        restaurant,
+      };
+    } catch {
+      return {
+        ok: false,
+        error: 'Restaurant is not found',
       };
     }
   }

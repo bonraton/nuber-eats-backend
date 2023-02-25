@@ -1,4 +1,4 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { AuthUser } from 'src/auth/auth-user.decorator';
 import { User } from 'src/user/entities/user.entity';
 import {
@@ -17,6 +17,7 @@ import {
   DeleteRestaurantInput,
   DeleteRestaurantOutput,
 } from './dtos/delete-restaurant.dto';
+import { RestaurantInput, RestaurantOutput } from './dtos/restaurant.dto';
 
 @Resolver(() => Restaurant)
 export class RestaurantResolver {
@@ -54,5 +55,10 @@ export class RestaurantResolver {
       owner,
       deleteRestaurantInput,
     );
+  }
+
+  @Query(() => RestaurantOutput)
+  async findRestaurant(@Args('input') restaurantInput: RestaurantInput) {
+    return this.restaurantService.findRestaurant(restaurantInput);
   }
 }
