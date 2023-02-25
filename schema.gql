@@ -94,10 +94,17 @@ type AllCategoriesOutput {
   categories: [Category!]
 }
 
+type CategoryOutput {
+  error: String
+  ok: Boolean!
+  category: Category
+}
+
 type Query {
   me: User!
   userProfile(userId: Float!): UserProfileOutput!
   allCategories: AllCategoriesOutput!
+  category(slug: String!): CategoryOutput!
 }
 
 type Mutation {
