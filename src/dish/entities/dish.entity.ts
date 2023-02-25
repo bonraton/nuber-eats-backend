@@ -10,11 +10,20 @@ class DishOption {
   @Field(() => String)
   name: string;
 
-  @Field(() => [String], { nullable: true })
-  choise?: string[];
+  @Field(() => [DishChoise], { nullable: true })
+  choises?: DishChoise[];
 
   @Field(() => Number, { nullable: true })
   extra?: number[];
+}
+
+@InputType('DishChoiseInputType')
+@ObjectType()
+class DishChoise {
+  @Field(() => String)
+  name: string;
+  @Field(() => Number, { nullable: true })
+  extra?: number;
 }
 
 @InputType('dishInputType')

@@ -113,7 +113,6 @@ export class RestaurantService {
       const restaurant = await this.restaurants.findOne({
         where: { id: deleteRestaurantInput.restaurantId },
       });
-      console.log(restaurant);
       if (!restaurant) {
         return {
           ok: false,

@@ -4,6 +4,7 @@ import { User } from 'src/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateDishInput, CreateDishOutput } from './dtos/create-dish.dto';
 import { DeleteDishInput } from './dtos/delete-dish.dto';
+import { EditDishInput, EditDishOutput } from './dtos/edit-dish.dto';
 import { Dish } from './entities/dish.entity';
 
 export class DishService {
@@ -49,32 +50,65 @@ export class DishService {
     }
   }
 
-  async deleteDish(owner: User, { id, restaurantId }: DeleteDishInput) {
+  async deleteDish(owner: User, { dishId }: DeleteDishInput) {
     try {
-      const restaurant = await this.restaurants.findOne({
-        where: { id: restaurantId },
+      const dish = await this.dishes.findOne({
+        where: { id: dishId },
+        relations: ['restaurant'],
       });
-      if (!restaurant) {
+      if (!dish) {
         return {
           ok: false,
-          error: 'Restaurant is not found',
+          error: 'Dish is not found',
         };
       }
-      if (owner.id !== restaurant.ownerId) {
+      if (dish.restaurant.ownerId !== owner.id) {
         return {
           ok: false,
-          error: "You can't delete dish",
+          error: "You cand edit menu you don't own",
         };
       }
-      await this.dishes.delete(id);
+      await this.dishes.delete(dishId);
       return {
-        ok: true,
+        ok: false,
       };
-    } catch {
+    } catch (e) {
+      console.log(e);
       return {
         ok: false,
         error: 'Could not delete dish',
       };
     }
+  }
+
+  async editDish(
+    owner: User,
+    editDishInput: EditDishInput,
+  ): Promise<EditDishOutput> {
+    const dish = await this.dishes.findOne({
+      where: { id: editDishInput.dishId },
+      relations: ['restaurant'],
+    });
+    if (!dish) {
+      return {
+        ok: false,
+        error: 'Dish is not found',
+      };
+    }
+    if (dish.restaurant.ownerId !== owner.id) {
+      return {
+        ok: false,
+        error: "You can't edit menu",
+      };
+    }
+    await this.dishes.save([
+      {
+        id: editDishInput.dishId,
+        ...editDishInput,
+      },
+    ]);
+    return {
+      ok: true,
+    };
   }
 }

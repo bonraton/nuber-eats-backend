@@ -20,7 +20,12 @@ scalar DateTime
 
 type DishOption {
   name: String!
-  choise: [String!]
+  choises: [DishChoise!]
+  extra: Float
+}
+
+type DishChoise {
+  name: String!
   extra: Float
 }
 
@@ -145,9 +150,19 @@ type DeleteDishOutput {
   ok: Boolean!
 }
 
+type EditDishOutput {
+  error: String
+  ok: Boolean!
+}
+
 input dishOptionInputType {
   name: String!
-  choise: [String!]
+  choises: [DishChoiseInputType!]
+  extra: Float
+}
+
+input DishChoiseInputType {
+  name: String!
   extra: Float
 }
 
@@ -218,6 +233,7 @@ type Mutation {
   deleteRestaurant(input: DeleteRestaurantInput!): DeleteRestaurantOutput!
   createDish(input: CreateDishInput!): CreateDishOutput!
   deleteDish(input: DeleteDishInput!): DeleteDishOutput!
+  editDish(input: EditDishInput!): EditDishOutput!
 }
 
 input CreateAccountInput {
@@ -269,6 +285,13 @@ input CreateDishInput {
 }
 
 input DeleteDishInput {
-  id: Float!
-  restaurantId: Float!
+  dishId: Float!
+}
+
+input EditDishInput {
+  name: String
+  price: Float
+  description: String
+  options: [dishOptionInputType!]
+  dishId: Float!
 }
