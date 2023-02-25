@@ -31,24 +31,37 @@ export class CategoryService {
     return this.restaurants.count({ where: { category: { id: category.id } } });
   }
 
-  async findCategorySlug(
-    categoryInput: CategoryInput,
-  ): Promise<CategoryOutput> {
+  async findCategorySlug({
+    slug,
+    page,
+  }: CategoryInput): Promise<CategoryOutput> {
     try {
       const category = await this.categories.findOne({
-        where: { slug: categoryInput.slug },
-        relations: ['restaurants'],
+        where: { slug: slug },
       });
-      console.log(category);
       if (!category) {
         return {
           ok: false,
           error: 'Category is not found',
         };
       }
+      const restaurants = await this.restaurants.find({
+        where: {
+          category: {
+            id: category.id,
+          },
+        },
+        take: 30,
+        skip: (page - 1) * 30,
+      });
+      category.restaurants = restaurants;
+      const totalResults = await this.restaurants.count({
+        where: { category: { id: category.id } },
+      });
       return {
         ok: true,
         category,
+        totalPages: Math.ceil(totalResults / 30),
       };
     } catch (e) {
       console.log(e);

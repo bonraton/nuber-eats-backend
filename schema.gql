@@ -97,6 +97,7 @@ type AllCategoriesOutput {
 type CategoryOutput {
   error: String
   ok: Boolean!
+  totalPages: Float
   category: Category
 }
 
@@ -104,7 +105,12 @@ type Query {
   me: User!
   userProfile(userId: Float!): UserProfileOutput!
   allCategories: AllCategoriesOutput!
-  category(slug: String!): CategoryOutput!
+  category(input: CategoryInput!): CategoryOutput!
+}
+
+input CategoryInput {
+  page: Float! = 1
+  slug: String!
 }
 
 type Mutation {
