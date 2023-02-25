@@ -4,6 +4,19 @@ import { Column, Entity, ManyToOne, RelationId } from 'typeorm';
 import { IsNumber, IsString, Length } from 'class-validator';
 import { Restaurant } from 'src/restaurant/entities/restaurant.entity';
 
+@InputType('dishOptionInputType')
+@ObjectType()
+class DishOption {
+  @Field(() => String)
+  name: string;
+
+  @Field(() => [String], { nullable: true })
+  choise?: string[];
+
+  @Field(() => Number, { nullable: true })
+  extra?: number[];
+}
+
 @InputType('dishInputType')
 @ObjectType()
 @Entity()
@@ -18,10 +31,10 @@ export class Dish extends CoreEntity {
   @IsNumber()
   price: number;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   @Column()
   @IsString()
-  photo: string;
+  photo?: string;
 
   @Field(() => String)
   @Column()
@@ -37,4 +50,8 @@ export class Dish extends CoreEntity {
 
   @RelationId((dish: Dish) => dish.restaurant)
   restaurantId: number;
+
+  @Field(() => [DishOption], { nullable: true })
+  @Column({ type: 'json', nullable: true })
+  options?: DishOption[];
 }

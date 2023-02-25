@@ -12,10 +12,7 @@ import {
 } from './entities/dtos/edit-profile.dto';
 import { Verification } from './entities/verification.entity';
 import { MailService } from 'src/mail/mail.service';
-import {
-  UserProfileInput,
-  UserProfileOutput,
-} from './entities/dtos/user-profile.dto';
+import { UserProfileOutput } from './entities/dtos/user-profile.dto';
 import { VerifyEmailOutput } from './entities/dtos/verify-email.dto';
 
 @Injectable()
