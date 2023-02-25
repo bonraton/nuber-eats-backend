@@ -4,7 +4,7 @@ import { IsString } from 'class-validator';
 import { CoreEntity } from 'src/common/etities/core.entity';
 import { Restaurant } from '../../restaurant/entities/restaurant.entity';
 
-@InputType({ isAbstract: true })
+@InputType('categoryInput', { isAbstract: true })
 @ObjectType()
 @Entity()
 export class Category extends CoreEntity {

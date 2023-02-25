@@ -18,7 +18,7 @@ export enum UserRole {
 }
 
 registerEnumType(UserRole, { name: 'UserRole' });
-@InputType({ isAbstract: true })
+@InputType('userInput', { isAbstract: true })
 @ObjectType({ isAbstract: true })
 @Entity()
 export class User extends CoreEntity {
