@@ -4,6 +4,7 @@ import { Role } from 'src/auth/role.decorator';
 import { User } from 'src/user/entities/user.entity';
 import { DishService } from './dish.service';
 import { CreateDishInput, CreateDishOutput } from './dtos/create-dish.dto';
+import { DeleteDishInput, DeleteDishOutput } from './dtos/delete-dish.dto';
 import { Dish } from './entities/dish.entity';
 
 @Resolver(() => Dish)
@@ -17,6 +18,14 @@ export class DishResolver {
     @Args('input') createDishInput: CreateDishInput,
   ): Promise<CreateDishOutput> {
     return this.dishService.createDish(owner, createDishInput);
-    // return this.dishService.createDish(createDishInput);
+  }
+
+  @Mutation(() => DeleteDishOutput)
+  @Role('Owner')
+  async deleteDish(
+    @AuthUser() owner: User,
+    @Args('input') deleteDishInput: DeleteDishInput,
+  ): Promise<DeleteDishOutput> {
+    return this.dishService.deleteDish(owner, deleteDishInput);
   }
 }

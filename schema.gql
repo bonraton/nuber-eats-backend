@@ -140,6 +140,11 @@ type CreateDishOutput {
   ok: Boolean!
 }
 
+type DeleteDishOutput {
+  error: String
+  ok: Boolean!
+}
+
 input dishOptionInputType {
   name: String!
   choise: [String!]
@@ -212,6 +217,7 @@ type Mutation {
   EditRestaurant(input: EditRestaurantInput!): EditRestaurantOutput!
   deleteRestaurant(input: DeleteRestaurantInput!): DeleteRestaurantOutput!
   createDish(input: CreateDishInput!): CreateDishOutput!
+  deleteDish(input: DeleteDishInput!): DeleteDishOutput!
 }
 
 input CreateAccountInput {
@@ -259,5 +265,10 @@ input CreateDishInput {
   photo: String
   description: String!
   options: [dishOptionInputType!]
+  restaurantId: Float!
+}
+
+input DeleteDishInput {
+  id: Float!
   restaurantId: Float!
 }
