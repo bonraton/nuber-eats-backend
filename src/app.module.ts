@@ -17,8 +17,9 @@ import { Verification } from './user/entities/verification.entity';
 import { MailModule } from './mail/mail.module';
 import { RestaurantModule } from './restaurant/restaurant.module';
 import { Restaurant } from './restaurant/entities/restaurant.entity';
-import { Category } from './restaurant/entities/category.entity';
+import { Category } from './category/entities/category.entity';
 import { AuthModule } from './auth/auth.module';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
@@ -68,6 +69,7 @@ import { AuthModule } from './auth/auth.module';
     UserModule,
     RestaurantModule,
     AuthModule,
+    CategoryModule,
   ],
   controllers: [],
   providers: [],

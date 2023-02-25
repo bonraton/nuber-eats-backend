@@ -10,6 +10,7 @@ type Category {
   coverImg: String
   slug: String!
   restaurants: [Restaurant!]!
+  restaurantCount: Float!
 }
 
 """
@@ -87,9 +88,16 @@ type DeleteRestaurantOutput {
   ok: Boolean!
 }
 
+type AllCategoriesOutput {
+  error: String
+  ok: Boolean!
+  categories: [Category!]
+}
+
 type Query {
   me: User!
   userProfile(userId: Float!): UserProfileOutput!
+  allCategories: AllCategoriesOutput!
 }
 
 type Mutation {

@@ -14,7 +14,7 @@ import {
   EditRestaurantInput,
   EditRestaurantOutput,
 } from './dtos/edit-restaurant-dto';
-import { Category } from './entities/category.entity';
+import { Category } from '../category/entities/category.entity';
 import { Restaurant } from './entities/restaurant.entity';
 
 @Injectable()

@@ -2,7 +2,7 @@ import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { Column, Entity, ManyToOne, RelationId } from 'typeorm';
 import { IsString } from 'class-validator';
 import { CoreEntity } from 'src/common/etities/core.entity';
-import { Category } from './category.entity';
+import { Category } from '../../category/entities/category.entity';
 import { User } from 'src/user/entities/user.entity';
 
 @InputType({ isAbstract: true })
