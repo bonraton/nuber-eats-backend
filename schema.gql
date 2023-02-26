@@ -41,16 +41,16 @@ type Dish {
   options: [DishOption!]
 }
 
-type Restaurant {
+type Order {
   id: Float!
   createdAt: DateTime!
   updatedAt: DateTime!
-  name: String!
-  coverImg: String!
-  adress: String!
-  category: Category
-  owner: User!
-  menu: [Dish!]!
+  customer: User
+  driver: User
+  restaurant: Restaurant!
+  dishes: [Dish!]!
+  total: Float!
+  status: OrderStatus!
 }
 
 type User {
@@ -62,12 +62,34 @@ type User {
   role: UserRole!
   verified: Boolean!
   restaurants: [Restaurant!]!
+  orders: [Order!]!
+  rides: [Order!]!
 }
 
 enum UserRole {
   Client
   Owner
   Delivery
+}
+
+enum OrderStatus {
+  Pending
+  Cooking
+  PickedUp
+  Delivered
+}
+
+type Restaurant {
+  id: Float!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  coverImg: String!
+  adress: String!
+  category: Category
+  owner: User!
+  menu: [Dish!]!
+  orders: [Order!]!
 }
 
 type CoreOutput {
@@ -182,6 +204,7 @@ input restaurantInput {
   category: categoryInput
   owner: userInput!
   menu: [dishInputType!]!
+  orders: [orderInputType!]!
 }
 
 input categoryInput {
@@ -198,6 +221,17 @@ input userInput {
   role: UserRole!
   verified: Boolean!
   restaurants: [restaurantInput!]!
+  orders: [orderInputType!]!
+  rides: [orderInputType!]!
+}
+
+input orderInputType {
+  customer: userInput
+  driver: userInput
+  restaurant: restaurantInput!
+  dishes: [dishInputType!]!
+  total: Float!
+  status: OrderStatus!
 }
 
 type Query {

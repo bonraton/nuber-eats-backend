@@ -22,6 +22,8 @@ import { AuthModule } from './auth/auth.module';
 import { CategoryModule } from './category/category.module';
 import { DishModule } from './dish/dish.module';
 import { Dish } from './dish/entities/dish.entity';
+import { OrdersModule } from './orders/orders.module';
+import { Order } from './orders/entities/order.entity';
 
 @Module({
   imports: [
@@ -52,7 +54,7 @@ import { Dish } from './dish/entities/dish.entity';
       synchronize: process.env.NODE_ENV !== 'prod',
       logging:
         process.env.NODE_ENV !== 'prod' && process.env.NODE_ENV !== 'test',
-      entities: [User, Verification, Restaurant, Category, Dish],
+      entities: [User, Verification, Restaurant, Category, Dish, Order],
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
@@ -73,6 +75,7 @@ import { Dish } from './dish/entities/dish.entity';
     AuthModule,
     CategoryModule,
     DishModule,
+    OrdersModule,
   ],
   controllers: [],
   providers: [],
