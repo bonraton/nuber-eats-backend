@@ -324,6 +324,7 @@ type Mutation {
   editDish(input: EditDishInput!): EditDishOutput!
   createOrder(input: CreateOrderInput!): CreateOrderOutput!
   editOrder(input: EditOrderInput!): EditOrderOutput!
+  potatoReady: Boolean!
 }
 
 input CreateAccountInput {
@@ -399,4 +400,8 @@ input CreateOrderItemInput {
 input EditOrderInput {
   id: Float!
   status: OrderStatus!
+}
+
+type Subscription {
+  readyPotatoe: String!
 }

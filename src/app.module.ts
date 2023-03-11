@@ -25,6 +25,7 @@ import { Dish } from './dish/entities/dish.entity';
 import { OrdersModule } from './orders/orders.module';
 import { Order } from './orders/entities/order.entity';
 import { OrderItem } from './orders/entities/order-item.entity';
+import { Context } from '@apollo/client';
 
 @Module({
   imports: [
@@ -68,8 +69,26 @@ import { OrderItem } from './orders/entities/order-item.entity';
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: 'schema.gql', // used for generating schema
+      installSubscriptionHandlers: true,
+      playground: true,
+      subscriptions: {
+        'subscriptions-transport-ws': {
+          path: '/graphql',
+          onConnect: (connectionParams) => {
+            const authToken = connectionParams['X-JWT'];
+            return {
+              token: authToken,
+            };
+          },
+        },
+      },
       // autoSchemaFile: true, // used for created schema
-      context: ({ req }) => ({ user: req['user'] }), // context gets with every request to gql
+      context: async ({ req }) => {
+        const token = req.headers['x-jwt'];
+        if (req) {
+          return { token: token };
+        }
+      },
     }),
     JwtModule.forRoot({
       privateKey: process.env.PRIVATE_KEY,
@@ -89,12 +108,4 @@ import { OrderItem } from './orders/entities/order-item.entity';
   controllers: [],
   providers: [],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    // for use in specific routes | paths
-    consumer.apply(JwtMiddleWare).forRoutes({
-      path: '/graphql',
-      method: RequestMethod.POST,
-    });
-  }
-}
+export class AppModule {}
