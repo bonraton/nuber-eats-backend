@@ -17,6 +17,7 @@ import {
 } from 'src/common/common.constants';
 import { PubSub } from 'graphql-subscriptions';
 import { OrderUpdatesInput } from './dtos/order-updates.dto';
+import { TakeOrderInput, TakeOrderOutput } from './dtos/take-order.dto';
 
 @Resolver(() => Order)
 export class OrderResolver {
@@ -82,19 +83,30 @@ export class OrderResolver {
 
   @Subscription(() => Order, {
     filter: ({ orderUpdates: order }, { input }, { user }) => {
-      console.log(order.driverId);
+      console.log(order.driver.id, user.id);
+      console.log(order.customerId, user.id);
+      console.log(order.restaurant.ownerId, user.id);
       if (
-        order.id !== user.id &&
+        order.driver.id !== user.id &&
         order.customerId !== user.id &&
         order.restaurant.ownerId !== user.id
       ) {
         return false;
       }
-      return order.id === user.id;
+      return order.id === input.id;
     },
   })
   @Role('Any')
   orderUpdates(@Args('input') orderUpdatesInput: OrderUpdatesInput) {
     return this.pubSub.asyncIterator(NEW_ORDER_UPDATED);
+  }
+
+  @Mutation(() => TakeOrderOutput)
+  @Role('Delivery')
+  takeOrder(
+    @AuthUser() driver: User,
+    @Args('input') takeOrderInput: TakeOrderInput,
+  ): Promise<TakeOrderOutput> {
+    return this.ordersService.takeOrder(driver, takeOrderInput);
   }
 }
