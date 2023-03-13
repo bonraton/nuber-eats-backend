@@ -11,10 +11,12 @@ import { EditOrderInput, EditOrderOutput } from './dtos/edit-order.dto';
 import { Inject } from '@nestjs/common';
 import {
   NEW_COOCKED_ORDER,
+  NEW_ORDER_UPDATED,
   NEW_PENDING_ORDER,
   PUB_SUB,
 } from 'src/common/common.constants';
 import { PubSub } from 'graphql-subscriptions';
+import { OrderUpdatesInput } from './dtos/order-updates.dto';
 
 @Resolver(() => Order)
 export class OrderResolver {
@@ -76,5 +78,23 @@ export class OrderResolver {
   @Role('Delivery')
   coockedOrders() {
     return this.pubSub.asyncIterator(NEW_COOCKED_ORDER);
+  }
+
+  @Subscription(() => Order, {
+    filter: ({ orderUpdates: order }, { input }, { user }) => {
+      console.log(order.driverId);
+      if (
+        order.id !== user.id &&
+        order.customerId !== user.id &&
+        order.restaurant.ownerId !== user.id
+      ) {
+        return false;
+      }
+      return order.id === user.id;
+    },
+  })
+  @Role('Any')
+  orderUpdates(@Args('input') orderUpdatesInput: OrderUpdatesInput) {
+    return this.pubSub.asyncIterator(NEW_ORDER_UPDATED);
   }
 }

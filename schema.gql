@@ -404,4 +404,9 @@ input EditOrderInput {
 type Subscription {
   pendingOrders: Order!
   coockedOrders: Order!
+  orderUpdates(input: OrderUpdatesInput!): Order!
+}
+
+input OrderUpdatesInput {
+  id: Float!
 }
