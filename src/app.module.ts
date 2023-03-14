@@ -1,9 +1,4 @@
-import {
-  MiddlewareConsumer,
-  Module,
-  NestModule,
-  RequestMethod,
-} from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import * as Joi from 'joi';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -12,7 +7,6 @@ import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './user/user.module';
 import { User } from './user/entities/user.entity';
 import { JwtModule } from './jwt/jwt.module';
-import { JwtMiddleWare } from './jwt/jwt.middleware';
 import { Verification } from './user/entities/verification.entity';
 import { MailModule } from './mail/mail.module';
 import { RestaurantModule } from './restaurant/restaurant.module';
@@ -25,8 +19,9 @@ import { Dish } from './dish/entities/dish.entity';
 import { OrdersModule } from './orders/orders.module';
 import { Order } from './orders/entities/order.entity';
 import { OrderItem } from './orders/entities/order-item.entity';
-import { Context } from '@apollo/client';
 import { CommonModule } from './common/common.module';
+import { PaymentsModule } from './payments/payments.module';
+import { Payment } from './payments/entities/payment.entity';
 
 @Module({
   imports: [
@@ -65,6 +60,7 @@ import { CommonModule } from './common/common.module';
         Dish,
         Order,
         OrderItem,
+        Payment,
       ],
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
@@ -106,6 +102,7 @@ import { CommonModule } from './common/common.module';
     DishModule,
     OrdersModule,
     CommonModule,
+    PaymentsModule,
   ],
   controllers: [],
   providers: [],
