@@ -83,9 +83,6 @@ export class OrderResolver {
 
   @Subscription(() => Order, {
     filter: ({ orderUpdates: order }, { input }, { user }) => {
-      console.log(order.driver.id, user.id);
-      console.log(order.customerId, user.id);
-      console.log(order.restaurant.ownerId, user.id);
       if (
         order.driver.id !== user.id &&
         order.customerId !== user.id &&
