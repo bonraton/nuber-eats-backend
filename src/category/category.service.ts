@@ -53,6 +53,9 @@ export class CategoryService {
         },
         take: 30,
         skip: (page - 1) * 30,
+        order: {
+          isPromoted: 'DESC',
+        },
       });
       category.restaurants = restaurants;
       const totalResults = await this.restaurants.count({

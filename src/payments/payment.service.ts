@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Cron, Interval } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Restaurant } from 'src/restaurant/entities/restaurant.entity';
 import { User } from 'src/user/entities/user.entity';
@@ -38,6 +39,11 @@ export class PaymentService {
           error: 'You are not allowed to do this',
         };
       }
+      restaurant.isPromoted = true;
+      const date = new Date();
+      date.setDate(date.getDate() + 7);
+      restaurant.promotedUntil = date;
+      this.restaurants.save(restaurant);
       await this.payments.save(
         this.payments.create({
           transactionId,
@@ -75,5 +81,15 @@ export class PaymentService {
         error: 'could not load payments',
       };
     }
+  }
+
+  @Cron('30 * * * * *')
+  checkForPayments() {
+    console.log('check for payments...');
+  }
+
+  @Interval(10000)
+  checkForPayments1() {
+    console.log('check for payments...');
   }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/user/entities/user.entity';
-import { ILike, Repository } from 'typeorm';
+import { ILike, LessThan, MoreThan, Repository } from 'typeorm';
 import {
   CreateRestaurantInput,
   CreateRestaurantOutput,
@@ -21,6 +21,8 @@ import {
   SearchRestaurantInput,
   SearchRestaurantOutput,
 } from './dtos/search-restaurant.dto';
+import { RestaurantsInput, RestaurantsOutput } from './dtos/restaurants.dto';
+import { Interval } from '@nestjs/schedule';
 
 @Injectable()
 export class RestaurantService {
@@ -65,6 +67,29 @@ export class RestaurantService {
       return {
         ok: false,
         error: 'Could not create restaurant',
+      };
+    }
+  }
+
+  async allRestaurants({ page }: RestaurantsInput): Promise<RestaurantsOutput> {
+    try {
+      const [restaurants, totalResults] = await this.restaurants.findAndCount({
+        skip: (page - 1) * 30,
+        take: 25,
+        order: {
+          isPromoted: 'DESC',
+        },
+      });
+      return {
+        ok: true,
+        restaurants: restaurants,
+        totalPages: Math.ceil(totalResults / 25),
+        totalResults,
+      };
+    } catch {
+      return {
+        ok: false,
+        error: 'Could not load restaurants',
       };
     }
   }
@@ -175,6 +200,9 @@ export class RestaurantService {
         },
         take: 30,
         skip: (page - 1) * 30,
+        order: {
+          isPromoted: 'DESC',
+        },
       });
       if (!restaurants) {
         return {
@@ -196,5 +224,19 @@ export class RestaurantService {
         error: 'Could not search restaurant',
       };
     }
+  }
+
+  @Interval(60000)
+  async checkPromotedRestaurants() {
+    const restaurants = await this.restaurants.find({
+      where: { isPromoted: true, promotedUntil: LessThan(new Date()) },
+    });
+
+    restaurants.forEach(async (restaurant) => {
+      restaurant.isPromoted = false;
+      restaurant.promotedUntil = null;
+      await this.restaurants.save(restaurant);
+    });
+    console.log(restaurants);
   }
 }

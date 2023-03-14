@@ -104,6 +104,8 @@ type Restaurant {
   owner: User!
   menu: [Dish!]!
   orders: [Order!]!
+  isPromoted: Boolean!
+  promotedUntil: DateTime
 }
 
 type Payment {
@@ -169,6 +171,14 @@ type SearchRestaurantOutput {
   totalPages: Float
   totalResult: Float
   restaurants: [Restaurant!]
+}
+
+type RestaurantsOutput {
+  error: String
+  ok: Boolean!
+  restaurants: [Restaurant!]
+  totalResults: Float
+  totalPages: Float
 }
 
 type AllCategoriesOutput {
@@ -266,6 +276,8 @@ input restaurantInput {
   owner: userInput!
   menu: [dishInputType!]!
   orders: [orderInputType!]!
+  isPromoted: Boolean!
+  promotedUntil: DateTime
 }
 
 input categoryInput {
@@ -314,6 +326,7 @@ input orderItemOptionInput {
 type Query {
   me: User!
   userProfile(userId: Float!): UserProfileOutput!
+  allRestaurants(input: RestaurantsInput!): RestaurantsOutput!
   findRestaurant(input: RestaurantInput!): RestaurantOutput!
   searchRestaurant(input: SearchRestaurantInput!): SearchRestaurantOutput!
   allCategories: AllCategoriesOutput!
@@ -321,6 +334,10 @@ type Query {
   getOrders(input: GetOrdersInput!): GetOrdersOutput!
   getOrder(input: GetOrderInput!): GetOrderOutput!
   getPayments: GetPaymentsOutput!
+}
+
+input RestaurantsInput {
+  page: Float!
 }
 
 input RestaurantInput {
